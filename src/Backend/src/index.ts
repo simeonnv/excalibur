@@ -3,11 +3,11 @@ import express from 'express';
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import bodyParser from 'body-parser';
-import cors from 'cors'
+import cors from 'cors';
 
 const PORT:number = 5000;
 const app = express();
-const DATABASENAME:string = "skibidi"
+const DATABASENAME:string = "skibidi";
 
 mongoose.connect('mongodb://localhost:27017/' + DATABASENAME);
 const db = mongoose.connection;
@@ -38,7 +38,7 @@ app.post('/register', async (req, res) => {
     console.log("register", req.body)
     
     try {
-        const hashedPassword: string = await bcrypt.hash(req.body.password, 10) // encript password
+        const hashedPassword: string = await bcrypt.hash(req.body.password, 10) // encrypt password
         const user = new User({ email: req.body.email, username: req.body.username, password: hashedPassword });
         const newUser = await user.save();
         res.status(201).json(newUser);
