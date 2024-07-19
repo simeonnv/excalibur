@@ -1,7 +1,7 @@
 import './App.css';
 //import LoginSignup from './Components/Assets/LoginSignup/LoginSignup';
-//import ClassroomDashboard from './Components/Assets/ClassroomDashboard/ClassroomDashboard';
-import ClassroomDashboardTeacher from './Components/Assets/ClassroomDashboardTeacher/ClassroomDashboardTeacher';
+import ClassroomDashboard from './Components/Assets/ClassroomDashboard/ClassroomDashboard';
+//import ClassroomDashboardTeacher from './Components/Assets/ClassroomDashboardTeacher/ClassroomDashboardTeacher';
 
 // Когато искаш да пуснеш уеб сайта, остави само импорта на уеб сайта който ти трябва. може да коментираш тези които не ти трябват
 
@@ -10,7 +10,7 @@ import ClassroomDashboardTeacher from './Components/Assets/ClassroomDashboardTea
 function App() {
   return (
     <div>
-      <ClassroomDashboardTeacher/> 
+      <ClassroomDashboard/> 
     </div> // ^^^ Сменяш кои сайт да пуснеш
   ); 
 }

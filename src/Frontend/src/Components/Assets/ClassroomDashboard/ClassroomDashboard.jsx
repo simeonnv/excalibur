@@ -35,21 +35,30 @@ const ClassroomDashboard = () => {
                     <img src="" alt=""/><button id="classes">Classes</button>
                     </div>
                 </div>
-                <div className="classrooms">
-                    <div className="classroom1">
-                        <div className="title-caption">
-                            <h4>Javascript class</h4>
+
+                <div className="container1">
+                    <div className="classrooms">
+                        <div className="classroom1">
+                            <div className="title-caption">
+                                <h4>Javascript class</h4>
+                            </div>
+                        </div>
+                        <div className="classroom2">
+                            <div className="title-caption">
+                                <h4>Lua class</h4>
+                            </div>
+                        </div>
+                        <div className="classroom3">
+                            <div className="title-caption">
+                                <h4>C# class</h4>
+                            </div>
                         </div>
                     </div>
-                    <div className="classroom2">
-                        <div className="title-caption">
-                            <h4>Lua class</h4>
-                        </div>
+
+                    <div className="line-break1">
+                        <hr/>
                     </div>
-                    <div className="classroom3">
-                        <div className="title-caption">
-                            <h4>C# class</h4>
-                        </div>
+                    <div className="assignments">
                     </div>
                 </div>
 

@@ -71,8 +71,8 @@ const ClassroomDashboard = () => {
                                 <h4>C# class</h4>
                             </div>
                         </div>
-                        
                     </div>
+
                     <div className="line-break1">
                         <hr/>
                     </div>
