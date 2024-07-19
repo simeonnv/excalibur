@@ -31,6 +31,7 @@ const ClassroomDashboard = () => {
                     <div id="line-break"><hr/></div>
                     <div className="sidebar-buttons">
                     <img src="" alt=""/><button>Active Assignments</button>
+                    <img src="" alt=""/><button>Submitted Homework</button>
                     <img src="" alt=""/><button id="classes">Classes</button>
                     </div>
                 </div>

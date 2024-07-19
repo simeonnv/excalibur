@@ -21,6 +21,18 @@
     flex-direction: row;
 }
 
+.container1 {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.classinfo {
+    height: 50%;
+    width: 100%;
+}
+
 .sidebar {
     background-color: rgba(0,1,13,255);
     border-right: rgba(200 , 200, 200, 0.2);
@@ -112,7 +124,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
-    height: 100%;
+    height: 50%;
     overflow-x: hidden;
     overflow-y: scroll;
 }
@@ -152,10 +164,10 @@
 }
 
 .title-caption {
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-    height: 50px;
+    position: relative;
+    top: 70%;
+    left: 0%;
+    height: 30%;
     background-color: rgba(32, 32, 32, 0.5);
     backdrop-filter: blur(5px);
     color: white;
@@ -254,6 +266,75 @@ body.active-modal {
     animation: animateBlink 1.5s ease-in-out infinite; 
 }
 
+
+
+
+
+
+
+.modal5, .overlay {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+}
+
+.modal-content5 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1.4;
+    background: rgba(32, 32, 32, 1);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 3px;
+    max-width: 600px;
+    min-width: 300px;
+    max-height: 600px;
+    min-height: 350px;
+}
+
+.close-modal5 {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 7px;
+    background-color: red;
+    border: 2px solid white;
+    box-shadow: 0px 0px 10px white;
+    color: white;
+    font-weight: 700;
+    border-radius: 15px;
+}
+
+.save-modal5 {
+    position: absolute;
+    top: 90%;
+    right: 10px;
+    padding: 5px 7px;
+    background-color: rgb(95, 191, 255);
+    border: 2px solid white;
+    box-shadow: 0px 0px 10px white;
+    color: white;
+    font-weight: 700;
+    border-radius: 15px;
+}
+
+.save-modal5:hover{
+    cursor: pointer;
+    animation: animateBlink 1.5s ease-in-out infinite; 
+}
+
+.close-modal5:hover {
+    cursor: pointer;
+    animation: animateBlink 1.5s ease-in-out infinite; 
+}
+
+
 #email-input {
     height: 50px;
     width: 90%;
@@ -277,6 +358,16 @@ body.active-modal {
     color: #797979;
     font-size: 15px;
 }
+
+#file-upload::file-selector-button {
+    font-weight: 700;
+    color: white;
+    padding: 0.5em;
+    background-color: #797979;
+    border: thin solid grey;
+    border-radius: 3px;
+}
+  
 
 @keyframes animateBlink { 
     0% { 
@@ -312,4 +403,25 @@ body.active-modal {
   
 .box:hover {
     cursor: pointer;
+}
+
+.line-break1 {
+    width: 100%;
+    height: 1%;
+}
+
+.line-break1 hr {
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid rgba(200 , 200, 200, 0.2);
+}
+
+.assignments {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 50%;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }

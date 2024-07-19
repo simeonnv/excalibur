@@ -298,3 +298,12 @@ body.active-modal {
         box-shadow: 0px 0px 10px white; 
     } 
 }
+
+#file-upload::file-selector-button {
+    font-weight: 700;
+    color: white;
+    padding: 0.5em;
+    background-color: #797979;
+    border: thin solid grey;
+    border-radius: 3px;
+}

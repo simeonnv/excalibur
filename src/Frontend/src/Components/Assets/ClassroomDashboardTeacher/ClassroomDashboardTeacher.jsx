@@ -24,7 +24,7 @@ const ClassroomDashboard = () => {
     
       const [ Modal5, setModal5] = useState(false);
       const toggleModal5 = () => {
-          setModal(!Modal5)
+          setModal5(!Modal5)
       };
   
       if(Modal5) {
@@ -48,29 +48,37 @@ const ClassroomDashboard = () => {
                 </div>
                     <div id="line-break"><hr/></div>
                     <div className="sidebar-buttons">
-                    <img src="" alt=""/><button>Create Assignment</button>
+                    <img src="" alt=""/><button className="btn-modal5" onClick={toggleModal5}>Create Assignment</button>
                     <img src="" alt=""/><button>Active Assignments</button>
                     <img src="" alt=""/><button>Grades</button>
                     <img src="" alt=""/><button>Classes</button>
                     </div>
                 </div>
-                <div className="classrooms">
-                    <div className="classroom1">
-                        <div className="title-caption">
-                            <h4>Javascript class</h4>
+                <div className="container1">
+                    <div className="classrooms">
+                        <div className="classroom1">
+                            <div className="title-caption">
+                                <h4>Javascript class</h4>
+                            </div>
                         </div>
-                    </div>
-                    <div className="classroom2">
-                        <div className="title-caption">
-                            <h4>Lua class</h4>
+                        <div className="classroom2">
+                            <div className="title-caption">
+                                <h4>Lua class</h4>
+                            </div>
                         </div>
-                    </div>
-                    <div className="classroom3">
-                        <div className="title-caption">
-                            <h4>C# class</h4>
+                        <div className="classroom3">
+                            <div className="title-caption">
+                                <h4>C# class</h4>
+                            </div>
                         </div>
+                        
                     </div>
-                    {divs}
+                    <div className="line-break1">
+                        <hr/>
+                    </div>
+                    <div className="assignments">
+                        {divs}
+                    </div>
                 </div>
 
                 {Modal && (
@@ -100,29 +108,29 @@ const ClassroomDashboard = () => {
                 <div className="modal5">
                     <div className="overlay"></div>
                     <div className="modal-content5">
-                        <h2>Edit the class</h2>
+                        <h2>Create an Assignment</h2>
                         <p>
-                        Enter the class name
+                        Enter the Assignment name
                         </p>
-                        <input type="text" placeholder="Class name" id="email-input" />
+                        <input type="text" placeholder="Assignment name" id="email-input" />
                         <p>
-                        Upload your profile picture
+                        Enter the Assignment description
                         </p>
+                        <input type="text" placeholder="Assignment description" id="email-input" />
+                        <p>
+                        Enter the Assignment max points
+                        </p>
+                        <input type="text" placeholder="Assignment points" id="email-input" />
                         <p>Choose a file</p>
                         <input type="file" id="file-upload"></input>
-                        <button className="save-modal" onClick={toggleModal5}>
-                        Add class
-                        </button>
+                        <button className="close-modal5" onClick={toggleModal5}>X</button>
+                        <button className="save-modal5" onClick={addDiv}>Create</button>
                     </div>
                 </div>
                 )}
-                      <button onClick={addDiv}>Add Div</button>
-                        <div className="containerr">
-                            
-                        </div>
             </div>
         </div>
     )
-}
+} // Затруднявам се и не знам какво да направя :) 
 
 export default ClassroomDashboard
