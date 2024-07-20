@@ -48,26 +48,33 @@ app.post('/register', async (req, res) => {
         const user = new User({ email: req.body.email, username: req.body.username, password: hashedPassword, role: "student" });
         const newUser = await user.save();
         token = jwt.sign({ id: user._id, role: user.role }, ENCRYPTIONCODE, { expiresIn: '24h' });
-        res.status(201).json(newUser);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
+    res.json({ token });
 })
 
 app.post('/login', async (req, res) => {
     console.log("login", req.body)
-    let token = "";
-    try {
-        const user = await User.findOne({ username: req.body.username });
+    let token;
+    
+        const user = await User.findOne({ username: req.body.email });
         if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
-        res.json({ message: 'Logged in successfully' });
-        token = jwt.sign({ id: user._id, role: user.role }, ENCRYPTIONCODE, { expiresIn: '24h' });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-    res.json({ token });
+        console.log("nz", "BALLSLSS")
+        if (user.role)
+            token = jwt.sign({ id: user._id, role: user.role }, ENCRYPTIONCODE, { expiresIn: '24h' });
+        else
+            token = jwt.sign({ id: user._id, role: "student" }, ENCRYPTIONCODE, { expiresIn: '24h' });
+        res.json({ 
+            "token": token,
+            "status": "success"
+        });
+    
+    console.log("token", token)
+    
+    
 })
 
 // no tokens yet

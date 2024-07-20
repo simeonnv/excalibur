@@ -1,10 +1,12 @@
 import React, { act, useState } from 'react';
 import './LoginSignup.css';
+
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 
 const LoginSignup = () => {
-
+    const navigate = useNavigate();
     const [action, setAction] = useState("Sign up");
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -18,6 +20,10 @@ const LoginSignup = () => {
                     username,
                     password,
                 });
+                if (response.data.token) {
+                    localStorage.setItem('token', response.data.token);
+                    navigate('/');
+                }
                 console.log(response.data);
                 alert(response.data.message);
             } catch (error) {
@@ -26,9 +32,14 @@ const LoginSignup = () => {
         else
             try {
                 const response = await axios.post('http://localhost:5000/login', {
+                    email,
                     username,
                     password,
                 });
+                if (response.data.token) {
+                    localStorage.setItem('token', response.data.token);
+                    navigate('/');
+                }
                 console.log(response.data);
                 alert(response.data.message);
             } catch (error) {
