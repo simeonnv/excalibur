@@ -11,6 +11,7 @@ const PORT:number = 5000;
 const app = express();
 const DATABASENAME:string = "skibidi";
 const ENCRYPTIONCODE = Math.random().toString(36);
+let tokens = []
 
 mongoose.connect('mongodb://localhost:27017/' + DATABASENAME);
 const db = mongoose.connection;
@@ -21,7 +22,7 @@ db.once('open', () => console.log('Connected to Database'));
 
 app.use(express.json());
 app.use(cors());
-
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // account format
@@ -48,6 +49,7 @@ app.post('/register', async (req, res) => {
         const user = new User({ email: req.body.email, username: req.body.username, password: hashedPassword, role: "student" });
         const newUser = await user.save();
         token = jwt.sign({ id: user._id, role: user.role }, ENCRYPTIONCODE, { expiresIn: '24h' });
+        tokens.push(token)
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
@@ -88,6 +90,7 @@ app.listen(PORT, () =>
 
 
 const authenticateToken = (req, res, next) => {
+    console.log('Headers:', req.headers); 
     const token = req.headers['authorization'];
     if (!token) return res.sendStatus(401);
   
@@ -106,3 +109,29 @@ const authorizeRole = (roles) => {
       next();
     };
 };
+
+let checkTokenValidity = async (req, res, next) =>{
+    console.log(req.body)
+    const token = req.body.token;
+    if (!token) return res.status(401).send('Token is required');
+
+    try {
+        const decoded = jwt.verify(token, ENCRYPTIONCODE);
+        const tokenDoc = tokens.map((x) => x == decoded);
+
+        if (!tokenDoc) {
+            return res.status(401).send('Token is invalid');
+        }
+
+        req.user = decoded;
+        next()
+    } catch (err) {
+        return res.status(401).send('Token is invalid');
+    }
+}
+
+app.post('/checktoken', await checkTokenValidity, (req, res) => {
+    
+    res.send({ isAuthenticated: true, message: 'Access granted to counter' });
+})
+

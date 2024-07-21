@@ -1,4 +1,4 @@
-import React, { act, useState } from 'react';
+import React, { act, useState, useEffect } from 'react';
 import './LoginSignup.css';
 
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +12,31 @@ const LoginSignup = () => {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
 
+    const [auth, setAuth] = useState(null);
+    useEffect(() => {
+        const checkAuth = async () => {
+          try {
+            const token = await localStorage.getItem('token');
+            console.log(token)
+            const response = await axios.post('http://localhost:5000/checktoken', {token});
+            if (response.data.isAuthenticated) {
+              setAuth(true);
+            } else {
+              setAuth(false);
+            }
+          } catch (error) {
+            console.error('There was an error!', error);
+            setAuth(false);
+          }
+        };
+    
+        checkAuth();
+    }, []);
+    if (auth)
+        navigate('/');
+    else
+        localStorage.clear()
+    
     const handleSubmit = async (type) => {
         if (type === "Sign up")
             try {
