@@ -30,6 +30,11 @@ const App = () => {
             <ClassroomDashboard/>
           </ProtectedRoute>
         }/>
+        <Route path="/teacher" element={
+          <ProtectedRoute>
+            <ClassroomDashboardTeacher/>
+          </ProtectedRoute>
+        }/>
       </Routes>
     </Router>
   );

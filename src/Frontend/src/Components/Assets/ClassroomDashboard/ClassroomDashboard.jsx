@@ -1,12 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import './ClassroomDashboard.css';
 
-const ClassroomDashboard = () => {
 
+
+
+const ClassroomDashboard = () => {
+    
+    const [firstName, setFirstName] = useState("[First Name]");
+    const [secondName, setSecondName] = useState("[Second Name]");
     const [ Modal, setModal] = useState(false);
     const toggleModal = () => {
         setModal(!Modal)
     };
+
+    const getNames = async () => {
+        try {
+          const token = await localStorage.getItem('token');
+          console.log(token)
+          const response = await axios.post('http://localhost:5000/users/me', {token});
+          
+        setFirstName(response.data.username)
+
+        } catch (error) {
+          console.error('There was an error!', error);
+        }
+    };
+
+
+    useEffect(() => {
+        getNames();
+    }, []);
 
     if(Modal) {
         document.body.classList.add('active-modal')
@@ -21,10 +45,8 @@ const ClassroomDashboard = () => {
                 <div className="first-sidebar">
                     <div className="profile-picture"><img src={require("./media/hris.jpg")} alt="" /></div>
                     <div className="name-class">
-                        <div id="fname">[First Name]</div>
-                        <div id="lname">[Last Name]</div>
-                        <div id="user">[E-mail]</div>
-                        <div id="class">[Class]</div>
+                        <div id="fname">{firstName}</div>
+                        <div id="lname">{secondName}</div>
                         <button className="btn-modal" onClick={toggleModal}>Edit</button>
                     </div>
                 </div>
