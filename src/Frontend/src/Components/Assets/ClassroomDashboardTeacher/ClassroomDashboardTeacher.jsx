@@ -87,9 +87,9 @@ const ClassroomDashboard = () => {
                     <div className="modal-content">
                         <h2>Edit your profile</h2>
                         <p>
-                            Enter your new e-mail
+                            Enter your new password
                         </p>
-                        <input type="text" placeholder="E-mail" id="email-input" />
+                        <input type="text" placeholder="Password" id="pass-input" />
                         <p>
                             Upload your profile picture
                         </p>
