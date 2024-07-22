@@ -8,7 +8,7 @@
 }
 
 
-.container {
+.containerr {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -19,12 +19,12 @@
     padding-bottom: 30px;
 }
 
-.header {
+.headerr {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: auto;
-    width: 50%;
+    width: 80%;
     margin-top: 30px;
 }
 
@@ -58,14 +58,14 @@
     border-radius: 9px;
 }
 
-.inputs {
+.inputts {
     margin-top: 55px;
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
 
-.input {
+.inputt {
     display: flex;
     align-items: center;
     margin: auto;
@@ -79,7 +79,7 @@
     margin: 0px 30px
 }
 
-.input input {
+.inputt input {
     height: 50px;
     width: 400px;
     background: transparent;
@@ -119,7 +119,6 @@
     font-weight: 700;
     cursor: pointer;
 }
-
 
 .gray {
     background: #202020;

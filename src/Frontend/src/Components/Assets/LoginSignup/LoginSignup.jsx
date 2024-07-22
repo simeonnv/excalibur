@@ -1,40 +1,17 @@
-import React, { act, useState, useEffect } from 'react';
+import React, { act, useState } from 'react';
 import './LoginSignup.css';
-
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 
 const LoginSignup = () => {
-    const navigate = useNavigate();
+
     const [action, setAction] = useState("Sign up");
     const [username, setUsername] = useState('');
+    const [firstname, setFirstname] = useState('');
+    const [secondname, setSecondname] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
 
-    useEffect(() => {
-        const checkAuth = async () => {
-          try {
-            const token = await localStorage.getItem('token');
-            console.log(token)
-            const response = await axios.post('http://localhost:5000/checktoken', {token});
-            console.log(response.data.isAuthenticated)
-            
-            if (response.data.isAuthenticated)
-                navigate('/');
-            else
-                localStorage.clear()
-
-          } catch (error) {
-            console.error('There was an error!', error);
-          }
-        };
-    
-        checkAuth();
-    }, []);
-
-    
-    
     const handleSubmit = async (type) => {
         if (type === "Sign up")
             try {
@@ -43,10 +20,6 @@ const LoginSignup = () => {
                     username,
                     password,
                 });
-                if (response.data.token) {
-                    localStorage.setItem('token', response.data.token);
-                    navigate('/');
-                }
                 console.log(response.data);
                 alert(response.data.message);
             } catch (error) {
@@ -55,14 +28,9 @@ const LoginSignup = () => {
         else
             try {
                 const response = await axios.post('http://localhost:5000/login', {
-                    email,
                     username,
                     password,
                 });
-                if (response.data.token) {
-                    localStorage.setItem('token', response.data.token);
-                    navigate('/');
-                }
                 console.log(response.data);
                 alert(response.data.message);
             } catch (error) {
@@ -71,27 +39,36 @@ const LoginSignup = () => {
     };
 
     return (
-        <div className='container'>
-            <div className="header">
+        <div className='containerr'>
+            <div className="headerr">
                 <div className="text">
                     {action}
                     <div className="underline"></div>
                 </div>
-                <div className="inputs">
-                    {action==="Login"?<div></div>:<div className="input">
-                        <img src="" alt="" />
+                <div className="inputts">
+                    {action==="Login"?<div></div>:
+                    <div className="inputt">
                         <input 
                             type="text" 
-                            value={username}
-                            placeholder='Username'
-                            onChange={(e) => setUsername(e.target.value)}
+                            value={firstname}
+                            placeholder='First name'
+                            onChange={(e) => setFirstname(e.target.value)}
+                            required
+                        />
+                    <div className="inputt">
+                        <input 
+                            type="text" 
+                            value={secondname}
+                            placeholder='Second name'
+                            onChange={(e) => setSecondname(e.target.value)}
                             required
                         />
                             
+                    </div>
                     </div>}
 
-                    <div className="input">
-                        <img src="" alt="" />
+
+                    <div className="inputt">
                         <input 
                             type="email" 
                             placeholder='E-Mail Adress'
@@ -99,8 +76,7 @@ const LoginSignup = () => {
                             required
                         />
                     </div>
-                    <div className="input">
-                        <img src="" alt="" />
+                    <div className="inputt">
                         <input 
                             type="password"
                             value={password}
