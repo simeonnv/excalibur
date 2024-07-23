@@ -99,49 +99,50 @@ const ClassroomDashboard = () => {
     return (
         <div>
             <div className="container">
-        <div className="sidebar">
-          <div className="first-sidebar">
-            <div className="profile-picture"><img src={imageSrc} alt="" /></div>
-            <div className="name-class">
-              <div id="fname">{firstName}</div>
-              <div id="lname">{secondName}</div>
-              <div id="user">{email}</div>
-              <button className="btn-modal" onClick={toggleModal}>Edit</button>
-            </div>
-          </div>
-          <div id="line-break"><hr/></div>
-          <div className="sidebar-buttons">
-            <img src="" alt=""/><button>Active Assignments</button>
-            <img src="" alt=""/><button>Submitted Homework</button>
-            <img src="" alt=""/><button id="classes">Classes</button>
-          </div>
-        </div>
+                <div className="sidebar">
+                <div className="first-sidebar">
+                    <div className="profile-picture"><img src={imageSrc} alt="" /></div>
+                    <div className="name-class">
+                            <div id="fname">{firstName}</div>
+                            <div id="lname">{secondName}</div>
+                            <div id="user">{email}</div>
+                        <button className="btn-modal" onClick={toggleModal}>Edit</button>
+                    </div>
+                </div>
+                    <div id="line-break"><hr/></div>
+                    <div className="sidebar-buttons">
+                    <img src="" alt=""/><button className="btn-modal5" onClick={toggleModal5}>Create Assignment</button>
+                    <img src="" alt=""/><button>Active Assignments</button>
+                    <img src="" alt=""/><button>Grades</button>
+                    <img src="" alt=""/><button>Classes</button>
+                    </div>
+                </div>
+                <div className="container1">
+                    <div className="classrooms">
+                        <div className="classroom1">
+                            <div className="title-caption">
+                                <h4>Javascript class</h4>
+                            </div>
+                        </div>
+                        <div className="classroom2">
+                            <div className="title-caption">
+                                <h4>Lua class</h4>
+                            </div>
+                        </div>
+                        <div className="classroom3">
+                            <div className="title-caption">
+                                <h4>C# class</h4>
+                            </div>
+                        </div>
+                    </div>
 
-        <div className="container1">
-          <div className="classrooms">
-            <div className="classroom1">
-              <div className="title-caption">
-                <h4>Javascript class</h4>
-              </div>
-            </div>
-            <div className="classroom2">
-              <div className="title-caption">
-                <h4>Lua class</h4>
-              </div>
-            </div>
-            <div className="classroom3">
-              <div className="title-caption">
-                <h4>C# class</h4>
-              </div>
-            </div>
-          </div>
-
-          <div className="line-break1">
-            <hr/>
-          </div>
-          <div className="assignments">
-          </div>
-        </div>
+                    <div className="line-break1">
+                        <hr/>
+                    </div>
+                    <div className="assignments">
+                        {divs}
+                    </div>
+                </div>
 
                 {Modal && (
                 <div className="modal">
