@@ -1,14 +1,13 @@
 import React, { act, useState, useEffect } from 'react';
-import './LoginSignup.css';
-
 import { useNavigate } from 'react-router-dom';
+import './LoginSignup.css';
 import axios from 'axios';
-
 
 const LoginSignup = () => {
     const navigate = useNavigate();
     const [action, setAction] = useState("Sign up");
-    const [username, setUsername] = useState('');
+    const [firstname, setFirstname] = useState('');
+    const [secondname, setSecondname] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
 
@@ -33,14 +32,16 @@ const LoginSignup = () => {
         checkAuth();
     }, []);
 
-    
-    
+
+
+
     const handleSubmit = async (type) => {
         if (type === "Sign up")
             try {
                 const response = await axios.post('http://localhost:5000/register', {
+                    firstname,
+                    secondname,
                     email,
-                    username,
                     password,
                 });
                 if (response.data.token) {
@@ -56,7 +57,6 @@ const LoginSignup = () => {
             try {
                 const response = await axios.post('http://localhost:5000/login', {
                     email,
-                    username,
                     password,
                 });
                 if (response.data.token) {
@@ -71,27 +71,36 @@ const LoginSignup = () => {
     };
 
     return (
-        <div className='container'>
-            <div className="header">
+        <div className='containerr'>
+            <div className="headerr">
                 <div className="text">
                     {action}
                     <div className="underline"></div>
                 </div>
-                <div className="inputs">
-                    {action==="Login"?<div></div>:<div className="input">
-                        <img src="" alt="" />
+                <div className="inputts">
+                    {action==="Login"?<div></div>:
+                    <div className="inputt">
                         <input 
                             type="text" 
-                            value={username}
-                            placeholder='Username'
-                            onChange={(e) => setUsername(e.target.value)}
+                            value={firstname}
+                            placeholder='First name'
+                            onChange={(e) => setFirstname(e.target.value)}
+                            required
+                        />
+                    <div className="inputt">
+                        <input 
+                            type="text" 
+                            value={secondname}
+                            placeholder='Second name'
+                            onChange={(e) => setSecondname(e.target.value)}
                             required
                         />
                             
+                    </div>
                     </div>}
 
-                    <div className="input">
-                        <img src="" alt="" />
+
+                    <div className="inputt">
                         <input 
                             type="email" 
                             placeholder='E-Mail Adress'
@@ -99,8 +108,7 @@ const LoginSignup = () => {
                             required
                         />
                     </div>
-                    <div className="input">
-                        <img src="" alt="" />
+                    <div className="inputt">
                         <input 
                             type="password"
                             value={password}

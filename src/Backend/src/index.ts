@@ -28,8 +28,9 @@
     // account format
     const userSchema = new mongoose.Schema({
         email: { type: String, required: true, unique: true },
+        firstname: {type: String, required: true},
+        secondname: {type: String, required: true},
         role: {type: String, required: true},
-        username: { type: String, required: true, unique: true },
         password: { type: String, required: true }
     });
     const User = mongoose.model('User', userSchema);
@@ -46,7 +47,7 @@
         let token = "";
         try {
             const hashedPassword: string = await bcrypt.hash(req.body.password, 10) // encrypt password
-            const user = new User({ email: req.body.email, username: req.body.username, password: hashedPassword, role: "student" });
+            const user = new User({ email: req.body.email, firstname: req.body.firstname, secondname: req.body.secondname, password: hashedPassword, role: "student" });
             const newUser = await user.save();
             token = jwt.sign({ id: user._id, role: user.role }, ENCRYPTIONCODE, { expiresIn: '24h' });
             tokens.push(token)
@@ -60,7 +61,7 @@
         console.log("login", req.body)
         let token;
         
-            const user = await User.findOne({ username: req.body.email });
+            const user = await User.findOne({ email: req.body.email });
             if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
                 return res.status(400).json({ message: 'Invalid credentials' });
             }
@@ -114,6 +115,7 @@
         console.log(req.body)
         const token = req.body.token;
         if (!token) return res.status(401).send('Token is required');
+        if (!(tokens.map((x) => x == token))) return res.status(401).send('Token is invalid')
 
         try {
             const decoded = jwt.verify(token, ENCRYPTIONCODE);
@@ -121,12 +123,14 @@
 
             if (!tokenDoc) {
                 return res.status(401).send('Token is invalid');
+                console.log("topki")
             }
 
             req.user = decoded;
             next()
         } catch (err) {
             return res.status(401).send('Token is invalid');
+            console.log("nz")
         }
     }
 
@@ -153,10 +157,11 @@
         const id = req.params.id
         
         
-        const username = await User.findById(id).select('username');
+        const user = await User.findById(id);
 
         res.json({
-            username
+            firstname: user.firstname,
+            secondname: user.secondname,
         })
     })
 
@@ -174,9 +179,10 @@
         console.log(tokenInfo)
         const tokenId = tokenInfo.id
 
-        const username = (await User.findById(tokenId).select("username")).username;
-        console.log(username)
+        const user = await User.findById(tokenId);
         res.json({
-            username
+            firstname: user.firstname,
+            secondname: user.secondname,
+            email: user.email
         })
     })

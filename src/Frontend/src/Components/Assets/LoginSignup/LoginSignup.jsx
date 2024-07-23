@@ -1,25 +1,53 @@
-import React, { act, useState } from 'react';
+import React, { act, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './LoginSignup.css';
 import axios from 'axios';
 
-
 const LoginSignup = () => {
-
+    const navigate = useNavigate();
     const [action, setAction] = useState("Sign up");
-    const [username, setUsername] = useState('');
     const [firstname, setFirstname] = useState('');
     const [secondname, setSecondname] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
 
+    useEffect(() => {
+        const checkAuth = async () => {
+          try {
+            const token = await localStorage.getItem('token');
+            console.log(token)
+            const response = await axios.post('http://localhost:5000/checktoken', {token});
+            console.log(response.data.isAuthenticated)
+            
+            if (response.data.isAuthenticated)
+                navigate('/');
+            else
+                localStorage.clear()
+
+          } catch (error) {
+            console.error('There was an error!', error);
+          }
+        };
+    
+        checkAuth();
+    }, []);
+
+
+
+
     const handleSubmit = async (type) => {
         if (type === "Sign up")
             try {
                 const response = await axios.post('http://localhost:5000/register', {
+                    firstname,
+                    secondname,
                     email,
-                    username,
                     password,
                 });
+                if (response.data.token) {
+                    localStorage.setItem('token', response.data.token);
+                    navigate('/');
+                }
                 console.log(response.data);
                 alert(response.data.message);
             } catch (error) {
@@ -28,9 +56,13 @@ const LoginSignup = () => {
         else
             try {
                 const response = await axios.post('http://localhost:5000/login', {
-                    username,
+                    email,
                     password,
                 });
+                if (response.data.token) {
+                    localStorage.setItem('token', response.data.token);
+                    navigate('/');
+                }
                 console.log(response.data);
                 alert(response.data.message);
             } catch (error) {

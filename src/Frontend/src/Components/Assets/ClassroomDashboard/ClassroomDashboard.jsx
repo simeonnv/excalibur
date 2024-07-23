@@ -9,6 +9,8 @@ const ClassroomDashboard = () => {
     
     const [firstName, setFirstName] = useState("[First Name]");
     const [secondName, setSecondName] = useState("[Second Name]");
+    const [email, setEmail] = useState("[Second Name]");
+
     const [ Modal, setModal] = useState(false);
     const toggleModal = () => {
         setModal(!Modal)
@@ -20,7 +22,9 @@ const ClassroomDashboard = () => {
           console.log(token)
           const response = await axios.post('http://localhost:5000/users/me', {token});
           
-        setFirstName(response.data.username)
+        setFirstName(response.data.firstname)
+        setSecondName(response.data.secondname)
+        setEmail(response.data.email)
 
         } catch (error) {
           console.error('There was an error!', error);
@@ -47,6 +51,7 @@ const ClassroomDashboard = () => {
                     <div className="name-class">
                         <div id="fname">{firstName}</div>
                         <div id="lname">{secondName}</div>
+                        <div id="user">{email}</div>
                         <button className="btn-modal" onClick={toggleModal}>Edit</button>
                     </div>
                 </div>
