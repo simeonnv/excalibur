@@ -37,7 +37,7 @@ const ClassroomDashboard = () => {
     const [firstName, setFirstName] = useState("[First Name]");
     const [secondName, setSecondName] = useState("[Last Name]");
     const [email, setEmail] = useState("[E-Mail]");
-    const [pass, setPass] = useState("[Pass]");
+    const [pass, setPass] = useState(null);
     const [imageSrc, setImageSrc] = useState('');
     const [newEmail, setNewEmail] = useState('');
     const [newImage, setNewImage] = useState(null);
@@ -49,11 +49,10 @@ const ClassroomDashboard = () => {
             const response = await axios.post('http://localhost:5000/users/me', { token });
 
             const base64Image = `data:${response.data.image.contentType};base64,${response.data.image.data}`;
+            console.log(response.data.email)
             setImageSrc(base64Image);
             setFirstName(response.data.firstname)
             setSecondName(response.data.secondname)
-            setPass(response.data.pass)
-            setNewPass(response.data.pass)
             setEmail(response.data.email)
             setNewEmail(response.data.email)
         } catch (error) {
@@ -70,7 +69,7 @@ const ClassroomDashboard = () => {
     };
 
     const handlePassChange = (event) => {
-        setNewPass(event.target.value);
+        setPass(event.target.value);
     };
 
     const handleSubmit = async (event) => {
@@ -80,6 +79,9 @@ const ClassroomDashboard = () => {
         const token = await localStorage.getItem('token');
         formData.append('token', token);
 
+        if (pass) {
+            formData.append('password', pass);
+        }
 
         if (newImage) {
             formData.append('image', newImage);
@@ -175,7 +177,6 @@ const ClassroomDashboard = () => {
                                     type="pass"
                                     placeholder="Password"
                                     id="email-input"
-                                    value={newEmail}
                                     onChange={handlePassChange}
                                     required
                                 />

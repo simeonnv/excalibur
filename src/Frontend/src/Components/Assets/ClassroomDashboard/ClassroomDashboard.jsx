@@ -6,6 +6,7 @@ const ClassroomDashboard = () => {
   const [firstName, setFirstName] = useState("[First Name]");
   const [secondName, setSecondName] = useState("[Last Name]");
   const [email, setEmail] = useState("[E-Mail]");
+  const [pass, setPass] = useState(null);
   const [imageSrc, setImageSrc] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [newImage, setNewImage] = useState(null);
@@ -25,8 +26,6 @@ const ClassroomDashboard = () => {
       setImageSrc(base64Image);  
       setFirstName(response.data.firstname)
       setSecondName(response.data.secondname)
-      setPass(response.data.pass)
-      setNewPass(response.data.pass)
       setEmail(response.data.email)
       setNewEmail(response.data.email)
     } catch (error) {
@@ -43,7 +42,7 @@ const ClassroomDashboard = () => {
   };
 
   const handlePassChange = (event) => {
-    setNewPass(event.target.value);
+    setPass(event.target.value);
   };
 
   const handleSubmit = async (event) => {
@@ -54,6 +53,11 @@ const ClassroomDashboard = () => {
     formData.append('token', token);
 
     
+    if (pass) {
+        formData.append('password', pass);
+    }
+
+
     if (newImage) {
       formData.append('image', newImage);
     }
@@ -144,17 +148,16 @@ const ClassroomDashboard = () => {
                   onChange={handleEmailChange}
                   required
                 />
-                                <p>
-                                    Enter your new password
-                                </p>
-                                    <input
-                                    type="pass"
-                                    placeholder="Password"
-                                    id="email-input"
-                                    value={newEmail}
-                                    onChange={handlePassChange}
-                                    required
-                                />
+                <p>
+                    Enter your new password
+                </p>
+                    <input
+                        type="pass"
+                        placeholder="Password"
+                        id="email-input"
+                        onChange={handlePassChange}
+                        required
+                    />
                 <p>
                   Upload your profile picture
                 </p>

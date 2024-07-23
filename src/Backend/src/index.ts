@@ -250,9 +250,12 @@
             return res.status(404).send({ message: 'User not found' });
           }
       
-          const { email } = req.body;
+          const { email, password } = req.body;
           if (email) {
             user.email = email;
+          }
+          if (password){
+            user.password = await bcrypt.hash(password, 10)
           }
       
           if (req.file) {
