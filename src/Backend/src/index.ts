@@ -1,4 +1,5 @@
-    import * as fs from 'fs';
+    import fs from 'fs';
+    import path from 'path';
     import express from 'express';
     import mongoose, { Document, Schema } from 'mongoose';
     import bcrypt from 'bcryptjs';
@@ -6,6 +7,12 @@
     import jwt from 'jsonwebtoken';
     import cors from 'cors';
     import { setInterval } from 'timers/promises';
+    import { fileURLToPath } from 'url';
+    import multer from 'multer'
+    const upload = multer();
+
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
 
     const PORT:number = 5000;
     const app = express();
@@ -25,13 +32,22 @@
     app.use(cors());
     app.use(bodyParser.urlencoded({ extended: true }));
 
-    // account format
+    const defaultImagePath = path.join(__dirname, '..', 'src', 'assets', 'Default.webp');
+    const defaultImage = {
+      data: fs.readFileSync(defaultImagePath),
+      contentType: 'image/webp'
+    };
+
     const userSchema = new mongoose.Schema({
         email: { type: String, required: true, unique: true },
         firstname: {type: String, required: true},
         secondname: {type: String, required: true},
         role: {type: String, required: true},
-        password: { type: String, required: true }
+        password: { type: String, required: true },
+        image: {
+            data: Buffer,
+            contentType: String
+        }
     });
     const User = mongoose.model('User', userSchema);
     // - /register (POST): Allows users to create an account. 
@@ -47,7 +63,14 @@
         let token = "";
         try {
             const hashedPassword: string = await bcrypt.hash(req.body.password, 10) // encrypt password
-            const user = new User({ email: req.body.email, firstname: req.body.firstname, secondname: req.body.secondname, password: hashedPassword, role: "student" });
+            const user = new User({ 
+                email: req.body.email, 
+                firstname: req.body.firstname, 
+                secondname: req.body.secondname, 
+                password: hashedPassword, 
+                role: "student",
+                image: defaultImage
+            });
             const newUser = await user.save();
             token = jwt.sign({ id: user._id, role: user.role }, ENCRYPTIONCODE, { expiresIn: '24h' });
             tokens.push(token)
@@ -102,12 +125,24 @@
         });
     };
 
-    const authorizeRole = (roles) => {
+    const authorizeRole = async (level) => {
         return (req, res, next) => {
-        if (!roles.includes(req.user.role)) {
-            return res.sendStatus(403);
-        }
-        next();
+            const token = req.body.token;
+            if (!token) return res.status(401).send('Token is required');
+    
+            try {
+                const decoded = jwt.verify(token, ENCRYPTIONCODE);
+                const { id, role } = decoded;
+                console.log("role", role)
+                if (level === role) {
+                    next();
+                } else {
+                    return res.status(403).send('Forbidden');
+                }
+            } catch (err) {
+                console.log(err)
+                return res.status(401).send('Token is invalid');
+            }
         };
     };
 
@@ -115,7 +150,6 @@
         console.log(req.body)
         const token = req.body.token;
         if (!token) return res.status(401).send('Token is required');
-        if (!(tokens.map((x) => x == token))) return res.status(401).send('Token is invalid')
 
         try {
             const decoded = jwt.verify(token, ENCRYPTIONCODE);
@@ -129,19 +163,24 @@
             req.user = decoded;
             next()
         } catch (err) {
+            console.log(err)
             return res.status(401).send('Token is invalid');
-            console.log("nz")
         }
     }
 
     app.post('/checktoken', await checkTokenValidity, (req, res) => {
-        
-        res.send({ isAuthenticated: true, message: 'Access granted to counter' });
+        const role = req.user.role
+        res.send({ isAuthenticated: true, message: 'Access granted to counter', role: role });
     })
 
-    app.post('/classes', await checkTokenValidity, authorizeRole("student"),  (req, res) => {
-
+    app.post('/checkteacher', await checkTokenValidity, await authorizeRole("teacher"), (req, res) => {
+        const role = req.user.role
+        res.send({ isAuthenticated: true, message: 'Access granted to counter', role: role });
     })
+
+    // app.post('/classes', await checkTokenValidity, authorizeRole("student"),  (req, res) => {
+
+    // })
 
 
 
@@ -162,6 +201,7 @@
         res.json({
             firstname: user.firstname,
             secondname: user.secondname,
+            image: user.image
         })
     })
 
@@ -183,6 +223,51 @@
         res.json({
             firstname: user.firstname,
             secondname: user.secondname,
+            image: {
+                data: user.image.data.toString('base64'),
+                contentType: user.image.contentType
+            },
             email: user.email
         })
     })
+
+    app.put('/users/me', upload.single('image'), async (req, res) => {
+        try {
+            const token = req.body.token
+
+            let tokenInfo
+            jwt.verify(token, ENCRYPTIONCODE, (err, info) => {
+                if (err) return res.sendStatus(403);
+                tokenInfo = info;
+            });
+    
+            console.log(tokenInfo)
+            const userId = tokenInfo.id
+
+            const user = await User.findById(userId);
+      
+          if (!user) {
+            return res.status(404).send({ message: 'User not found' });
+          }
+      
+          const { email } = req.body;
+          if (email) {
+            user.email = email;
+          }
+      
+          if (req.file) {
+            user.image = {
+              data: req.file.buffer,
+              contentType: req.file.mimetype
+            };
+          }
+      
+          await user.save();
+          res.status(200).send({ message: 'User updated successfully!' });
+        } catch (err) {
+            res.status(500).send(err);
+            console.log(err)
+        }
+      });
+      
+    

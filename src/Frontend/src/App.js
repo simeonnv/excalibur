@@ -24,17 +24,42 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<LoginSignup/>} />
+        <Route path="/login" element={<LoginSignup />} />
         <Route path="/" element={
-          <ProtectedRoute>
-            <ClassroomDashboard/>
+          <ProtectedRoute 
+            endpoint="checktoken" 
+            roleRedirects={{ 
+              student: "/student-dashboard", 
+              teacher: "/teacher-dashboard" 
+            }}
+          >
+            <ClassroomDashboard />
           </ProtectedRoute>
-        }/>
+        } />
         <Route path="/teacher" element={
-          <ProtectedRoute>
-            <ClassroomDashboardTeacher/>
+          <ProtectedRoute 
+            endpoint="checkteacher" 
+            navigateTo="/login"
+          >
+            <ClassroomDashboardTeacher />
           </ProtectedRoute>
-        }/>
+        } />
+        <Route path="/student-dashboard" element={
+          <ProtectedRoute 
+            endpoint="checktoken" 
+            navigateTo="/login"
+          >
+            <ClassroomDashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/teacher-dashboard" element={
+          <ProtectedRoute 
+            endpoint="checkteacher" 
+            navigateTo="/login"
+          >
+            <ClassroomDashboardTeacher />
+          </ProtectedRoute>
+        } />
       </Routes>
     </Router>
   );

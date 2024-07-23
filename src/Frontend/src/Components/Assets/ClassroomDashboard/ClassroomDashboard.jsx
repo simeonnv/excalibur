@@ -2,120 +2,164 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import './ClassroomDashboard.css';
 
-
-
-
 const ClassroomDashboard = () => {
+  const [firstName, setFirstName] = useState("[First Name]");
+  const [secondName, setSecondName] = useState("[Second Name]");
+  const [email, setEmail] = useState("[Second Name]");
+  const [imageSrc, setImageSrc] = useState('');
+  const [newEmail, setNewEmail] = useState('');
+  const [newImage, setNewImage] = useState(null);
+  const [Modal, setModal] = useState(false);
+
+  const toggleModal = () => {
+    setModal(!Modal)
+  };
+
+  const getNames = async () => {
+    try {
+      const token = await localStorage.getItem('token');
+      console.log(token)
+      const response = await axios.post('http://localhost:5000/users/me', {token});
     
-    const [firstName, setFirstName] = useState("[First Name]");
-    const [secondName, setSecondName] = useState("[Second Name]");
-    const [email, setEmail] = useState("[Second Name]");
+      const base64Image = `data:${response.data.image.contentType};base64,${response.data.image.data}`;
+      setImageSrc(base64Image);  
+      setFirstName(response.data.firstname)
+      setSecondName(response.data.secondname)
+      setEmail(response.data.email)
+      setNewEmail(response.data.email)
+    } catch (error) {
+      console.error('There was an error!', error);
+    }
+  };
 
-    const [ Modal, setModal] = useState(false);
-    const toggleModal = () => {
-        setModal(!Modal)
-    };
+  const handleFileChange = (event) => {
+    setNewImage(event.target.files[0]);
+  };
 
-    const getNames = async () => {
-        try {
-          const token = await localStorage.getItem('token');
-          console.log(token)
-          const response = await axios.post('http://localhost:5000/users/me', {token});
-          
-        setFirstName(response.data.firstname)
-        setSecondName(response.data.secondname)
-        setEmail(response.data.email)
+  const handleEmailChange = (event) => {
+    setNewEmail(event.target.value);
+  };
 
-        } catch (error) {
-          console.error('There was an error!', error);
-        }
-    };
-
-
-    useEffect(() => {
-        getNames();
-    }, []);
-
-    if(Modal) {
-        document.body.classList.add('active-modal')
-      } else {
-        document.body.classList.remove('active-modal')
-      }
+  const handleSubmit = async (event) => {
     
-    return (
-        <div>
-            <div className="container">
-                <div className="sidebar">
-                <div className="first-sidebar">
-                    <div className="profile-picture"><img src={require("./media/hris.jpg")} alt="" /></div>
-                    <div className="name-class">
-                        <div id="fname">{firstName}</div>
-                        <div id="lname">{secondName}</div>
-                        <div id="user">{email}</div>
-                        <button className="btn-modal" onClick={toggleModal}>Edit</button>
-                    </div>
-                </div>
-                    <div id="line-break"><hr/></div>
-                    <div className="sidebar-buttons">
-                    <img src="" alt=""/><button>Active Assignments</button>
-                    <img src="" alt=""/><button>Submitted Homework</button>
-                    <img src="" alt=""/><button id="classes">Classes</button>
-                    </div>
-                </div>
+    const formData = new FormData();
+    event.preventDefault();
+    const token = await localStorage.getItem('token');
+    formData.append('token', token);
 
-                <div className="container1">
-                    <div className="classrooms">
-                        <div className="classroom1">
-                            <div className="title-caption">
-                                <h4>Javascript class</h4>
-                            </div>
-                        </div>
-                        <div className="classroom2">
-                            <div className="title-caption">
-                                <h4>Lua class</h4>
-                            </div>
-                        </div>
-                        <div className="classroom3">
-                            <div className="title-caption">
-                                <h4>C# class</h4>
-                            </div>
-                        </div>
-                    </div>
+    
+    if (newImage) {
+      formData.append('image', newImage);
+    }
+    formData.append('email', newEmail);
 
-                    <div className="line-break1">
-                        <hr/>
-                    </div>
-                    <div className="assignments">
-                    </div>
-                </div>
+    try {
+      
+      await axios.put('http://localhost:5000/users/me', formData);
+      alert('Profile updated successfully!');
+      setModal(false);
+      getNames(); // Refresh the data
+    } catch (error) {
+      console.error('There was an error updating the profile!', error);
+    }
+  };
 
+  useEffect(() => {
+    getNames();
+  }, []);
 
-                {Modal && (
-                <div className="modal">
-                    <div className="overlay"></div>
-                    <div className="modal-content">
-                        <h2>Edit your profile</h2>
-                        <p>
-                            Enter your new e-mail
-                        </p>
-                        <input type="text" placeholder="E-mail" id="email-input" />
-                        <p>
-                            Upload your profile picture
-                        </p>
-                        <p>Choose a file</p>
-                        <input type="file" id="file-upload"></input>
-                        <button className="close-modal" onClick={toggleModal}>
-                        X
-                        </button>
-                        <button className="save-modal" onClick={toggleModal}>
-                        Save
-                        </button>
-                    </div>
-                </div>
-                )}
+  if(Modal) {
+    document.body.classList.add('active-modal')
+  } else {
+    document.body.classList.remove('active-modal')
+  }
+
+  return (
+    <div>
+      <div className="container">
+        <div className="sidebar">
+          <div className="first-sidebar">
+            <div className="profile-picture"><img src={imageSrc} alt="" /></div>
+            <div className="name-class">
+              <div id="fname">{firstName}</div>
+              <div id="lname">{secondName}</div>
+              <div id="user">{email}</div>
+              <button className="btn-modal" onClick={toggleModal}>Edit</button>
             </div>
+          </div>
+          <div id="line-break"><hr/></div>
+          <div className="sidebar-buttons">
+            <img src="" alt=""/><button>Active Assignments</button>
+            <img src="" alt=""/><button>Submitted Homework</button>
+            <img src="" alt=""/><button id="classes">Classes</button>
+          </div>
         </div>
-    )
+
+        <div className="container1">
+          <div className="classrooms">
+            <div className="classroom1">
+              <div className="title-caption">
+                <h4>Javascript class</h4>
+              </div>
+            </div>
+            <div className="classroom2">
+              <div className="title-caption">
+                <h4>Lua class</h4>
+              </div>
+            </div>
+            <div className="classroom3">
+              <div className="title-caption">
+                <h4>C# class</h4>
+              </div>
+            </div>
+          </div>
+
+          <div className="line-break1">
+            <hr/>
+          </div>
+          <div className="assignments">
+          </div>
+        </div>
+
+        {Modal && (
+          <div className="modal">
+            <div className="overlay"></div>
+            <div className="modal-content">
+              <h2>Edit your profile</h2>
+              <form onSubmit={handleSubmit}>
+                <p>
+                  Enter your new e-mail
+                </p>
+                <input
+                  type="email"
+                  placeholder="E-mail"
+                  id="email-input"
+                  value={newEmail}
+                  onChange={handleEmailChange}
+                  required
+                />
+                <p>
+                  Upload your profile picture
+                </p>
+                <p>Choose a file</p>
+                <input
+                  type="file"
+                  id="file-upload"
+                  onChange={handleFileChange}
+                />
+                <button className="close-modal" type="button" onClick={toggleModal}>
+                  X
+                </button>
+                <button className="save-modal" type="submit">
+                  Save
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
 }
 
-export default ClassroomDashboard
+export default ClassroomDashboard;
