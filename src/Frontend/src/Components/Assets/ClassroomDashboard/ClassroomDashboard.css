@@ -216,7 +216,7 @@ body.active-modal {
     max-width: 600px;
     min-width: 300px;
     max-height: 600px;
-    min-height: 225px;
+    min-height: 275px;
 }
 
 .close-modal {
