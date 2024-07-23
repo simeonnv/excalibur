@@ -8,8 +8,8 @@ import Dropdown from './dropdown';
 function App() {
   return (
     <div className="App">
-      <Sidebar />
-      <Dashboard />
+      <Sidebar/>
+      <Dashboard/>
       <Dropdown/>
     </div>
   );

@@ -91,7 +91,7 @@ const LoginSignup = () => {
                         <input 
                             type="text" 
                             value={secondname}
-                            placeholder='Second name'
+                            placeholder='Last name'
                             onChange={(e) => setSecondname(e.target.value)}
                             required
                         />

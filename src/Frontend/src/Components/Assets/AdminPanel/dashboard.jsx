@@ -6,8 +6,8 @@ function Dashboard() {
     <div className="Dashboard">
       <div className="stats-container">
         <div className="stat-box">Success: <br />6.00</div>
-        <div className="stat-box">Active: <br /> 196</div>
-        <div className="stat-box">missed Assigments: <br />19</div>
+        <div className="stat-box">Active Assignments: <br /> 196</div>
+        <div className="stat-box">Missed Assigments: <br />19</div>
         <div className="stat-box">Done: <br />5</div>
       </div>
       <div className="chart-container">
