@@ -173,6 +173,10 @@
     color: white;
 }
 
+.title-caption h4{
+    text-wrap: wrap;
+}
+
 .classroom1:hover {
     cursor: pointer;
 }
