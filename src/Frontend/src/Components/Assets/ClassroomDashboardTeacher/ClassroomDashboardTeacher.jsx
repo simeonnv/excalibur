@@ -38,10 +38,22 @@ const ClassroomDashboard = () => {
         document.body.classList.remove('active-modal5')
     }
 
+    const [Modal3, setModal3] = useState(false);
+    const toggleModal3 = () => {
+        setModal3(!Modal3)
+    };
+
+    if (Modal3) {
+        document.body.classList.add('active-modal3')
+    } else {
+        document.body.classList.remove('active-modal3')
+    }
+    
     const [Modal4, setModal4] = useState(false);
     const toggleModal4 = () => {
         setModal4(!Modal4)
     };
+    
 
     if (Modal4) {
         document.body.classList.add('active-modal4')
@@ -206,6 +218,7 @@ const ClassroomDashboard = () => {
                         <img src="" alt="" /><button>Grades</button>
                         <img src="" alt="" /><button>Classes</button>
                         <img src="" alt="" /><button onClick={toggleModal4}>Create class</button>
+                        <img src="" alt="" /><button id="log-out" onClick={toggleModal3}>Log out</button>
                     </div>
                 </div>
                 
@@ -309,6 +322,16 @@ const ClassroomDashboard = () => {
                                     <option value="fourth">Student4</option>
                                 </select>
                             </div>
+                        </div>
+                    </div>
+                )}
+                {Modal3 && (
+                    <div className="modal3">
+                        <div className="overlay"></div>
+                        <div className="modal-content3">
+                            <h2>Are you sure you want to log out?</h2>
+                            <button className="close-modal3" onClick={toggleModal3}>No</button>
+                            <button className="save-modal3" onClick={toggleModal3}>Yes</button>
                         </div>
                     </div>
                 )}
