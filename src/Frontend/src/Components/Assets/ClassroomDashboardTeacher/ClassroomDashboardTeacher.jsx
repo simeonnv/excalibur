@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import './ClassroomDashboardTeacher.css';
+import Classes from './Classes';
 
 const ClassroomDashboard = () => {
 
@@ -66,6 +67,7 @@ const ClassroomDashboard = () => {
     const [imageSrc, setImageSrc] = useState('');
     const [newEmail, setNewEmail] = useState('');
     const [newImage, setNewImage] = useState(null);
+    const [classes, setClasses] = useState([]);
 
     const getNames = async () => {
         try {
@@ -74,12 +76,31 @@ const ClassroomDashboard = () => {
             const response = await axios.post('http://localhost:5000/users/me', { token });
 
             const base64Image = `data:${response.data.image.contentType};base64,${response.data.image.data}`;
-            console.log(response.data.email)
+            console.log("old image", base64Image)
             setImageSrc(base64Image);
             setFirstName(response.data.firstname)
             setSecondName(response.data.secondname)
             setEmail(response.data.email)
             setNewEmail(response.data.email)
+        } catch (error) {
+            console.error('There was an error!', error);
+        }
+    };
+
+    const getClasses = async () => {
+        try {
+            const token = await localStorage.getItem('token');
+            console.log(token)
+            const response = await axios.post('http://localhost:5000/class', { token });
+            const classes = response.data.classes
+            console.log(classes)
+            setClasses(classes)
+            
+
+
+            // const base64Image = `data:${response.data.image.contentType};base64,${response.data.image.data}`;
+            // const className = response.data.name
+            
         } catch (error) {
             console.error('There was an error!', error);
         }
@@ -126,9 +147,44 @@ const ClassroomDashboard = () => {
 
     useEffect(() => {
         getNames();
+        getClasses();
     }, []);
 
 
+    const [newClassName, setNewClassName] = useState('');
+    const [newClassImage, setNewClassImage] = useState(null);
+    
+    const handleNewClassName = (event) =>
+    {
+        setNewClassName(event.target.value);
+    }
+    const handleNewClassImage= (event) =>
+    {
+        setNewClassImage(event.target.files[0])
+    }
+
+
+
+    const handleCreateClass = async (event) =>
+    {
+        const formData = new FormData();
+        event.preventDefault();
+        const token = await localStorage.getItem('token');
+        formData.append('name', newClassName);
+        formData.append('image', newClassImage);
+        formData.append('token', token);
+        
+        try {
+
+            await axios.put('http://localhost:5000/class', formData);
+            alert('created class successfully');
+            setModal4(false)
+            getClasses();
+        } catch (error) {
+            console.error('There was an error updating the profile!', error);
+        }
+
+    }
 
     return (
         <div>
@@ -152,24 +208,12 @@ const ClassroomDashboard = () => {
                         <img src="" alt="" /><button onClick={toggleModal4}>Create class</button>
                     </div>
                 </div>
+                
                 <div className="container1">
                     <div className="classrooms">
-                        <div className="classroom1" onClick={toggleModal1}>
-                            <div className="title-caption">
-                                <h4>Javascript class</h4>
-                            </div>
-                        </div>
-                        <div className="classroom2" onClick={toggleModal1}>
-                            <div className="title-caption">
-                                <h4>Lua class</h4>
-                            </div>
-                        </div>
-                        <div className="classroom3" onClick={toggleModal1}>
-                            <div className="title-caption">
-                                <h4>C# class</h4>
-                            </div>
-                        </div>
-                        {divs1}
+                        
+                        <Classes classes={classes} />
+
                     </div>
 
                     <div className="line-break1">
@@ -205,7 +249,6 @@ const ClassroomDashboard = () => {
                                     placeholder="Password"
                                     id="email-input"
                                     onChange={handlePassChange}
-                                    required
                                 />
                                 <p>
                                     Upload your profile picture
@@ -269,7 +312,7 @@ const ClassroomDashboard = () => {
                         </div>
                     </div>
                 )}
-                {Modal4 && (
+                {Modal4 && ( //bomba
                     <div className="modal4">
                         <div className="overlay"></div>
                         <div className="modal-content4">
@@ -283,7 +326,7 @@ const ClassroomDashboard = () => {
                                     placeholder="Class name"
                                     id="email-input"
                                     // value={newEmail}
-                                    onChange={handleEmailChange}
+                                    onChange={handleNewClassName}
                                     required
                                 />
                                 <p>
@@ -293,12 +336,13 @@ const ClassroomDashboard = () => {
                                 <input
                                     type="file"
                                     id="file-upload"
-                                    onChange={handleFileChange}
+                                    onChange={handleNewClassImage}
+                                    required
                                 />
                                 <button className="close-modal" type="button" onClick={toggleModal4}>
                                     X
                                 </button>
-                                <button className="save-modal" type="submit" onClick={addDiv1}>
+                                <button className="save-modal" type="submit" onClick={handleCreateClass}>
                                     Create class
                                 </button>
                             </form>

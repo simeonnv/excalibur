@@ -49,6 +49,20 @@
             contentType: String
         }
     });
+
+    const classroomSchema = new Schema({
+        name: { type: String, required: true },
+        teacher: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+        students: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+        image: {
+            data: Buffer,
+            contentType: String
+        }
+    });
+
+
+    const Classroom = mongoose.model('Classroom', classroomSchema);
+
     const User = mongoose.model('User', userSchema);
     // - /register (POST): Allows users to create an account. 
     // - /login (POST): Allows users to log in to their account. 
@@ -147,7 +161,7 @@
     };
 
     let checkTokenValidity = async (req, res, next) =>{
-        console.log(req.body)
+        console.log("checkTokenValidity ", req.body)
         const token = req.body.token;
         if (!token) return res.status(401).send('Token is required');
 
@@ -183,6 +197,8 @@
     // })
 
 
+
+    
 
 
     app.get("/users/:id", async (req, res) =>
@@ -273,4 +289,69 @@
         }
       });
       
+      app.put('/class', upload.single('image'), async (req, res) => {
+        try {
+            console.log("why", req.body)
+            const token = req.body.token
+
+            let tokenInfo
+            jwt.verify(token, ENCRYPTIONCODE, (err, info) => {
+                if (err) return res.sendStatus(403);
+                tokenInfo = info;
+            })
+            const teacherId = tokenInfo.id
+
+            const classroom = new Classroom({
+                name: req.body.name,
+                teacher: teacherId,
+                students: []
+            });
+
+            classroom.image = {
+                data: req.file.buffer,
+                contentType: req.file.mimetype
+            };
+        
+            await classroom.save();
+
+          res.status(200).send({ message: 'classroom made successfully' });
+        } catch (err) {
+            res.status(500).send(err);
+            console.log(err)
+        }
+      });
+
+      app.post("/class", async (req, res) => {
+        const token = req.body.token;
+    
+        let tokenInfo;
+        jwt.verify(token, ENCRYPTIONCODE, (err, info) => {
+            if (err) return res.sendStatus(403);
+            tokenInfo = info;
+        });
+    
+        const tokenId = tokenInfo.id;
+        const tokenRole = tokenInfo.role;
+        let classrooms;
+    
+        if (tokenRole === 'teacher') {
+            classrooms = await Classroom.find({ teacher: tokenId });
+        } else if (tokenRole === 'student') {
+            classrooms = await Classroom.find({ students: tokenId });
+        }
+    
+        // Convert image data to base64 for each classroom
+        classrooms = classrooms.map(classroom => {
+            if (classroom.image && classroom.image.data) {
+                classroom.image.data = classroom.image.data.toString('base64');
+            }
+            return classroom.toObject(); // Convert MongoDB document to plain JavaScript object
+        });
+    
+        res.json({
+            classes: classrooms
+        });
+    });
+    
+    
     
