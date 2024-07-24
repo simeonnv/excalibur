@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import Select from "react-dropdown-select";
 import './ClassroomDashboardTeacher.css';
 
 const ClassroomDashboard = () => {
