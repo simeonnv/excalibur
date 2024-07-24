@@ -1,26 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
+import Select from "react-dropdown-select";
 import './ClassroomDashboardTeacher.css';
 
 const ClassroomDashboard = () => {
 
-    const options = [
-        {
-          id: 1,
-          name: 'Leanne Graham'
-        },
-        {
-          id: 2,
-          name: 'Ervin Howell'
-        }
-      ];
-
     const [divs, setDivs] = useState([]);
+    const [divs1, setDivs1] = useState([]);
 
     const addDiv = () => {
         setDivs([...divs, <div key={divs.length} className="box"></div>]);
     };
 
+    const addDiv1 = () => {
+        setDivs1([...divs1, <div key={divs1.length} className="box"></div>]);
+    };
 
     const [Modal, setModal] = useState(false);
     const toggleModal = () => {
@@ -42,6 +36,17 @@ const ClassroomDashboard = () => {
         document.body.classList.add('active-modal5')
     } else {
         document.body.classList.remove('active-modal5')
+    }
+
+    const [Modal4, setModal4] = useState(false);
+    const toggleModal4 = () => {
+        setModal4(!Modal4)
+    };
+
+    if (Modal4) {
+        document.body.classList.add('active-modal4')
+    } else {
+        document.body.classList.remove('active-modal4')
     }
 
     const [Modal5, setModal5] = useState(false);
@@ -145,6 +150,7 @@ const ClassroomDashboard = () => {
                         <img src="" alt="" /><button>Active Assignments</button>
                         <img src="" alt="" /><button>Grades</button>
                         <img src="" alt="" /><button>Classes</button>
+                        <img src="" alt="" /><button onClick={toggleModal4}>Create class</button>
                     </div>
                 </div>
                 <div className="container1">
@@ -164,6 +170,7 @@ const ClassroomDashboard = () => {
                                 <h4>C# class</h4>
                             </div>
                         </div>
+                        {divs1}
                     </div>
 
                     <div className="line-break1">
@@ -199,6 +206,7 @@ const ClassroomDashboard = () => {
                                     placeholder="Password"
                                     id="email-input"
                                     onChange={handlePassChange}
+                                    required
                                 />
                                 <p>
                                     Upload your profile picture
@@ -262,6 +270,42 @@ const ClassroomDashboard = () => {
                         </div>
                     </div>
                 )}
+                {Modal4 && (
+                    <div className="modal4">
+                        <div className="overlay"></div>
+                        <div className="modal-content4">
+                            <h2>Create a new class</h2>
+                            <form onSubmit={handleSubmit}>
+                                <p>
+                                    Enter class name
+                                </p>
+                                <input
+                                    type="name"
+                                    placeholder="Class name"
+                                    id="email-input"
+                                    // value={newEmail}
+                                    onChange={handleEmailChange}
+                                    required
+                                />
+                                <p>
+                                    Upload your class picture
+                                </p>
+                                <p>Choose a file</p>
+                                <input
+                                    type="file"
+                                    id="file-upload"
+                                    onChange={handleFileChange}
+                                />
+                                <button className="close-modal" type="button" onClick={toggleModal4}>
+                                    X
+                                </button>
+                                <button className="save-modal" type="submit" onClick={addDiv1}>
+                                    Create class
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                )}
                 {Modal5 && (
                     <div className="modal5">
                         <div className="overlay"></div>
@@ -279,6 +323,10 @@ const ClassroomDashboard = () => {
                                 Enter the Assignment max points
                             </p>
                             <input type="text" placeholder="Assignment points" id="email-input" />
+                            <p>
+                                Enter due date
+                            </p>
+                            <input type="date" id="start" name="trip-start" value="2024-07-26" min="2024-07-26" max="2025-12-30" />
                             <p>Choose a file</p>
                             <input type="file" id="file-upload"></input>
                             <button className="close-modal5" onClick={toggleModal5}>X</button>
