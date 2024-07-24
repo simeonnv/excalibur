@@ -16,7 +16,7 @@
 
     const PORT:number = 5000;
     const app = express();
-    const DATABASENAME:string = "skibidi";
+    const DATABASENAME:string = "excalibur";
     console.log(Math.random().toString(36))
     const ENCRYPTIONCODE = Math.random().toString(36);
     let tokens = []
