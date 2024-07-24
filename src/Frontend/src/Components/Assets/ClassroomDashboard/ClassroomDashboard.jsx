@@ -156,7 +156,6 @@ const ClassroomDashboard = () => {
                         placeholder="Password"
                         id="email-input"
                         onChange={handlePassChange}
-                        required
                     />
                 <p>
                   Upload your profile picture

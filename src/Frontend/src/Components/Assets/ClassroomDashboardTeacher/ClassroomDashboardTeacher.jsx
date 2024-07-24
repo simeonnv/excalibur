@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import Select from "react-dropdown-select";
 import './ClassroomDashboardTeacher.css';
 
 const ClassroomDashboard = () => {
@@ -200,7 +199,6 @@ const ClassroomDashboard = () => {
                                     placeholder="Password"
                                     id="email-input"
                                     onChange={handlePassChange}
-                                    required
                                 />
                                 <p>
                                     Upload your profile picture
