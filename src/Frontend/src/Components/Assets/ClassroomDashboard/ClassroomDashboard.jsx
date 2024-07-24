@@ -16,6 +16,17 @@ const ClassroomDashboard = () => {
     setModal(!Modal)
   };
 
+  const [Modal3, setModal3] = useState(false);
+  const toggleModal3 = () => {
+      setModal3(!Modal3)
+  };
+
+  if (Modal3) {
+      document.body.classList.add('active-modal3')
+  } else {
+      document.body.classList.remove('active-modal3')
+  }
+  
   const getNames = async () => {
     try {
       const token = await localStorage.getItem('token');
@@ -102,6 +113,7 @@ const ClassroomDashboard = () => {
             <img src="" alt=""/><button>Active Assignments</button>
             <img src="" alt=""/><button>Submitted Homework</button>
             <img src="" alt=""/><button id="classes">Classes</button>
+            <img src="" alt="" /><button id="log-out" onClick={toggleModal3}>Log out</button>
           </div>
         </div>
 
@@ -176,6 +188,16 @@ const ClassroomDashboard = () => {
             </div>
           </div>
         )}
+        {Modal3 && (
+                    <div className="modal3">
+                        <div className="overlay"></div>
+                        <div className="modal-content3">
+                            <h2>Are you sure you want to log out?</h2>
+                            <button className="close-modal3" onClick={toggleModal3}>No</button>
+                            <button className="save-modal3" onClick={toggleModal3}>Yes</button>
+                        </div>
+                    </div>
+                )}
       </div>
     </div>
   )
