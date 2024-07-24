@@ -1,9 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
+import Select from "react-dropdown-select";
 import './ClassroomDashboardTeacher.css';
 
 const ClassroomDashboard = () => {
 
+    const options = [
+        {
+          id: 1,
+          name: 'Leanne Graham'
+        },
+        {
+          id: 2,
+          name: 'Ervin Howell'
+        }
+      ];
 
     const [divs, setDivs] = useState([]);
 
@@ -21,6 +32,17 @@ const ClassroomDashboard = () => {
         document.body.classList.add('active-modal')
     } else {
         document.body.classList.remove('active-modal')
+    }
+
+    const [Modal1, setModal1] = useState(false);
+    const toggleModal1 = () => {
+        setModal1(!Modal1)
+    };
+
+    if (Modal1) {
+        document.body.classList.add('active-modal5')
+    } else {
+        document.body.classList.remove('active-modal5')
     }
 
     const [Modal5, setModal5] = useState(false);
@@ -128,17 +150,17 @@ const ClassroomDashboard = () => {
                 </div>
                 <div className="container1">
                     <div className="classrooms">
-                        <div className="classroom1">
+                        <div className="classroom1" onClick={toggleModal1}>
                             <div className="title-caption">
                                 <h4>Javascript class</h4>
                             </div>
                         </div>
-                        <div className="classroom2">
+                        <div className="classroom2" onClick={toggleModal1}>
                             <div className="title-caption">
                                 <h4>Lua class</h4>
                             </div>
                         </div>
-                        <div className="classroom3">
+                        <div className="classroom3" onClick={toggleModal1}>
                             <div className="title-caption">
                                 <h4>C# class</h4>
                             </div>
@@ -196,6 +218,49 @@ const ClassroomDashboard = () => {
                                     Save
                                 </button>
                             </form>
+                        </div>
+                    </div>
+                )}
+                {Modal1 && (
+                    <div className="modal1">
+                        <div className="overlay"></div>
+                        <div className="modal-content1">
+                        <h2>
+                            Manage students in the class
+                        </h2>
+                        <br />
+                        <p>
+                            All students:
+                        </p>
+                            <div className="select-container">
+                                <select name="" className="select-box">
+                                    <option value="">Select a student</option>
+                                    <option value="first">Student1</option>
+                                    <option value="second">Student2</option>
+                                    <option value="third">Student3</option>
+                                    <option value="fourth">Student4</option>
+                                </select>
+                            </div>
+                            <button className="close-modal1" onClick={toggleModal1}>X</button>
+                            <button className="save-modal1" onClick={toggleModal1}>Save</button>
+                            <button className="remove-student" onClick={toggleModal1}>Remove student</button>
+                            <button className="add-student" onClick={toggleModal1}>Add student</button>
+                            <p>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            Students in the class
+                            </p>
+                            <div>
+                                <select name="" className="select-box">
+                                    <option value="">Select a student</option>
+                                    <option value="first">Student1</option>
+                                    <option value="second">Student2</option>
+                                    <option value="third">Student3</option>
+                                    <option value="fourth">Student4</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 )}
