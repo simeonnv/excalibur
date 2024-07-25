@@ -64,9 +64,23 @@
     const Classroom = mongoose.model('Classroom', classroomSchema);
 
     const User = mongoose.model('User', userSchema);
-    // - /register (POST): Allows users to create an account. 
-    // - /login (POST): Allows users to log in to their account. 
-    // - /logout (GET): Allows users to log out of their account. 
+    
+try {
+    const hash: string = await bcrypt.hash("password", 10)
+    const user = new User({ 
+        email: "simmeon.nv@gmail.com", 
+        firstname: "simeon", 
+        secondname: "vang", 
+        password: hash, 
+        role: "teacher",
+        image: defaultImage
+    });
+    const newUser = await user.save();
+} catch (err) {
+
+}
+    
+
 
     app.get('/', (req, res) => {
         res.send("<h1>blehhhh</h1>")
@@ -115,11 +129,6 @@
         console.log("token", token)
         
         
-    })
-
-    // no tokens yet
-    app.post('/logout', function (req, res) {
-        res.send("<h1>blehhhh</h1>")
     })
 
     app.listen(PORT, () =>
@@ -289,7 +298,7 @@
         }
       });
       
-      app.put('/class', upload.single('image'), async (req, res) => {
+      app.put('/class', await authorizeRole("teacher"), upload.single('image'), async (req, res) => {
         try {
             console.log("why", req.body)
             const token = req.body.token

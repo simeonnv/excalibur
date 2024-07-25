@@ -678,7 +678,7 @@ body.active-modal {
 }
 
 .chat {
-    width: 90%;
+    width: 100%;
     height: 85%;
     display: flex;
     flex-direction: column;
@@ -687,17 +687,18 @@ body.active-modal {
 
 .message {
     height: 15%;
-    width: 90%;
+    width: 100%;
     display: flex;
     flex-direction: row;
 }
 
 #text {
-    width: 80%;
+    width: 100%;
     height: 90%;
     background-color: black;
     color: white;
-    border-radius: 5px;
+    border: none;
+    font-size: 1.4em;
     text-wrap: wrap;
     resize: none;
     overflow-y: scroll;
@@ -705,6 +706,7 @@ body.active-modal {
 
 .chat p {
     color: white;
+    font-size: 1.4em;
     margin-left: 2.5em;
     margin-right: 2.5em;
     margin-top: 2.5em;
@@ -724,10 +726,13 @@ body.active-modal {
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-    width: 10%;
+    font-size: 2em;
+    width: 50%;
 }
 
 .students {
+    margin-top: 1em;
+    margin-left: 0.7em;
     color: white;
 }
 

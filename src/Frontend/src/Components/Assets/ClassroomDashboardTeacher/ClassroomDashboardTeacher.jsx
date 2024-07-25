@@ -8,7 +8,7 @@ const ClassroomDashboard = () => {
 
     const [divs, setDivs] = useState([]);
     const [divs1, setDivs1] = useState([]);
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     function myFunction() {
         let x = document.getElementById("classroom1");
@@ -208,12 +208,12 @@ const ClassroomDashboard = () => {
 
     }
 
-    // const handleLogOut = async () =>
-    // {
-    //     const token = await localStorage.getItem('token');
-    //     localStorage.clear()
-    //     navigate('/login');
-    // }
+    const handleLogOut = async () =>
+    {
+        const token = await localStorage.getItem('token');
+        localStorage.clear()
+        navigate('/login');
+    }
 
 
     return (
@@ -259,7 +259,10 @@ const ClassroomDashboard = () => {
                 <div id="classroom1">
                     <div className="message-and-chat">
                         <div className="chat">
-                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum, enim, recusandae doloribus accusamus in quos aliquam provident modi esse harum quis nostrum iusto ab cum saepe soluta nobis, non autem?</p>
+                            <p>
+                                <h4 style={{marginTop: "0em", marginBottom: "0.2em", color:"blue"}}>simeon</h4>
+                                <>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum, enim, recusandae doloribus accusamus in quos aliquam provident modi esse harum quis nostrum iusto ab cum saepe soluta nobis, non autem?</>
+                            </p>
                             <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum, enim, recusandae doloribus accusamus in quos aliquam provident modi esse harum quis nostrum iusto ab cum saepe soluta nobis, non autem?</p>
                             <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum, enim, recusandae doloribus accusamus in quos aliquam provident modi esse harum quis nostrum iusto ab cum saepe soluta nobis, non autem?</p>
                         </div>
@@ -376,7 +379,7 @@ const ClassroomDashboard = () => {
                         <div className="modal-content3">
                             <h2>Are you sure you want to log out?</h2>
                             <button className="close-modal3" onClick={toggleModal3}>No</button>
-                            <button className="save-modal3" onClick={() => {toggleModal3();}}>Yes</button>
+                            <button className="save-modal3" onClick={() => {toggleModal3();handleLogOut()}}>Yes</button>
                         </div>
                     </div>
                 )}
