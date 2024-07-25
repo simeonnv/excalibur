@@ -209,10 +209,10 @@ const ClassroomDashboard = () => {
     }
 
     const handleLogOut = async () =>
-    {
-        const token = await localStorage.getItem('token');
-        localStorage.clear()
-        navigate('/login');
+     {
+         const token = await localStorage.getItem('token');
+         localStorage.clear()
+         navigate('/login');
     }
 
 
