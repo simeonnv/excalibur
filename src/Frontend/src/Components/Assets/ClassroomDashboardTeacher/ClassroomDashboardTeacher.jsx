@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Classroom1 from './Classroom1'
 import './ClassroomDashboardTeacher.css';
 import Classes from './Classes';
 
@@ -250,40 +251,14 @@ const ClassroomDashboard = () => {
                     </div>
 
                     <div className="line-break1">
-                        <hr />
+                        <hr/>
                     </div>
                     <div className="assignments">
                         {divs}
                     </div>
                 </div>
-                <div id="classroom1">
-                    <div className="message-and-chat">
-                        <div className="chat">
-                            <p>
-                                <h4 style={{marginTop: "0em", marginBottom: "0.2em", color:"blue"}}>simeon</h4>
-                                <>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum, enim, recusandae doloribus accusamus in quos aliquam provident modi esse harum quis nostrum iusto ab cum saepe soluta nobis, non autem?</>
-                            </p>
-                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum, enim, recusandae doloribus accusamus in quos aliquam provident modi esse harum quis nostrum iusto ab cum saepe soluta nobis, non autem?</p>
-                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum, enim, recusandae doloribus accusamus in quos aliquam provident modi esse harum quis nostrum iusto ab cum saepe soluta nobis, non autem?</p>
-                        </div>
-                        <div className="message">
-                            <textarea type="text" id="text" placeholder="Enter a message"/>
-                        <div className="buttons-message">
-                            <input type="file" id="file" placeholder="Add file"/>
-                            <button id="submit-message">Submit</button>
-                        </div>
-                    </div>
-                </div>
-                    <div className="class-list">
-                        <div className="students">
-                            <li>firstname secondname</li>
-                            <li>firstname secondname</li>
-                            <li>firstname secondname</li>
-                            <li>firstname secondname</li>
-                        </div>
-                    </div>
-                </div>
                 
+                <Classroom1></Classroom1>
 
                 {Modal && (
                     <div className="modal">
