@@ -748,10 +748,14 @@ input[type="date"] {
     width: 90%;
 }
 
-input[type="file"] {
+/* input[type="file"] {
     display: none;
-  }
+} */
   
+#file-upload-class{
+  display: none;
+}
+
   .custom-file-upload {
     border: none;
     display: inline-block;

@@ -7,13 +7,26 @@ import Classes from './Classes';
 
 const ClassroomDashboard = () => {
 
+    const [classId, setclassId] = useState("");
+
+
+
     const [divs, setDivs] = useState([]);
     const [divs1, setDivs1] = useState([]);
     const navigate = useNavigate();
 
-    function myFunction() {
+    const [firstTime, setFirstTime] = useState(true);
+
+    function openClass() {
         let x = document.getElementById("classroom1");
         let z = document.getElementById("container1");
+
+
+        if (firstTime) {
+            x.style.display = "none"
+            setFirstTime(false)
+        }
+        
         if (x.style.display === "none") {
             x.style.display = "flex";
             z.style.display = "none"
@@ -193,13 +206,16 @@ const ClassroomDashboard = () => {
         const formData = new FormData();
         event.preventDefault();
         const token = await localStorage.getItem('token');
+
+
         formData.append('name', newClassName);
         formData.append('image', newClassImage);
         formData.append('token', token);
-        
+
+
         try {
 
-            await axios.put('http://localhost:5000/class', formData);
+            await axios.put('http://localhost:5000/class', formData );
             alert('created class successfully');
             setModal4(false)
             getClasses();
@@ -237,8 +253,6 @@ const ClassroomDashboard = () => {
                         <img src="" alt="" /><button>Grades</button>
                         <img src="" alt="" /><button>Classes</button>
                         <img src="" alt="" /><button onClick={toggleModal4}>Create class</button>
-                        <img src="" alt="" /><button onClick={myFunction}>Try it</button>
-                        {/* Може тази функция да го сложиш на всеки клас ^ */}
                         <img src="" alt="" /><button id="log-out" onClick={toggleModal3}>Log out</button> 
                     </div>
                 </div>
@@ -246,7 +260,7 @@ const ClassroomDashboard = () => {
                 <div id="container1">
                     <div className="classrooms">
                         
-                        <Classes classes={classes} />
+                        <Classes classes={classes} setclassId={setclassId} openClass={openClass} />
             
                     </div>
 
@@ -258,7 +272,7 @@ const ClassroomDashboard = () => {
                     </div>
                 </div>
                 
-                <Classroom1></Classroom1>
+                <Classroom1 returnFunc={openClass} classroomId={classId} Name={firstName}/>
 
                 {Modal && (
                     <div className="modal">

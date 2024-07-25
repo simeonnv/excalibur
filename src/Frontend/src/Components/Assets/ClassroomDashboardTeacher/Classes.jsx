@@ -1,7 +1,7 @@
 // Classes.js
 import React from 'react';
 
-const Classes = ({ classes }) => {
+const Classes = ({ classes, setclassId, openClass}) => {
   const getImageSrc = (image) => {
     return `data:${image.contentType};base64,${image.data}`;
   };
@@ -30,10 +30,13 @@ const Classes = ({ classes }) => {
     textAlign: 'center'
   };
 
+
+
   return (
     <div>
       {classes.map((classroom, index) => (
-        <div key={index} className="classroom1" id={classroom.id} style={classroomStyle(getImageSrc(classroom.image))}>
+        <div key={index} className="classroom1" id={classroom.id} style={classroomStyle(getImageSrc(classroom.image))} 
+          onClick={() => { setclassId(classroom.id); openClass(); }}>
           <div className="title-caption" style={titleCaptionStyle}>
             <h4>{classroom.name}</h4>
           </div>

@@ -57,7 +57,17 @@
         image: {
             data: Buffer,
             contentType: String
-        }
+        }, 
+        chat: [{
+            name: { type: String, required: true },
+            text: { type: String, required: true },
+            image: {
+                data: Buffer,
+                contentType: String,
+                imageAttached: Boolean
+            }, 
+            timestamp: { type: Date, default: Date.now }
+        }]
     });
 
 
@@ -151,6 +161,7 @@ try {
     const authorizeRole = async (level) => {
         return (req, res, next) => {
             const token = req.body.token;
+            console.log(req.body)
             if (!token) return res.status(401).send('Token is required');
     
             try {
@@ -260,6 +271,8 @@ try {
         try {
             const token = req.body.token
 
+            
+
             let tokenInfo
             jwt.verify(token, ENCRYPTIONCODE, (err, info) => {
                 if (err) return res.sendStatus(403);
@@ -298,7 +311,7 @@ try {
         }
       });
       
-      app.put('/class', await authorizeRole("teacher"), upload.single('image'), async (req, res) => {
+      app.put('/class', upload.single('image'), async (req, res) => {
         try {
             console.log("why", req.body)
             const token = req.body.token
@@ -309,11 +322,17 @@ try {
                 tokenInfo = info;
             })
             const teacherId = tokenInfo.id
+            const isteacher = tokenInfo.role === "teacher"
+
+            if (!isteacher) {
+                return res.sendStatus(403);
+            }
 
             const classroom = new Classroom({
                 name: req.body.name,
                 teacher: teacherId,
-                students: []
+                students: [],
+                chat: []
             });
 
             classroom.image = {
@@ -356,7 +375,8 @@ try {
                 id: e._id,
                 image: {
                     data: e.image.data.toString('base64'),
-                    contentType: e.image.contentType
+                    contentType: e.image.contentType,
+                    imageAttached: e.image.imageAttached
                 }
             }
             array.push(json)
@@ -365,6 +385,141 @@ try {
         res.json({
             classes: array
         });
+    });
+
+    const getTokenInfo = (token, encryptionCode) => {
+        return new Promise((resolve, reject) => {
+            jwt.verify(token, encryptionCode, (err, decoded) => {
+                if (err) return reject(err);
+                resolve(decoded);
+            });
+        });
+    };
+    
+    app.put('/class/:id/texts', upload.single('image'), async (req, res) => {
+        try {
+            console.log("why", req.body);
+            const token = req.body.token;
+    
+            if (!token) {
+                return res.status(401).send('Token is required');
+            }
+    
+            let tokenInfo;
+            try {
+                tokenInfo = await getTokenInfo(token, ENCRYPTIONCODE);
+            } catch (err) {
+                return res.status(403).send('Invalid token');
+            }
+    
+            const tokenId = tokenInfo.id;
+            const classroomId = req.params.id;
+    
+            const classroom = await Classroom.findById(classroomId);
+    
+            if (!classroom) {
+                return res.status(404).send('Classroom not found');
+            }
+    
+            const isTeacher = classroom.teacher.equals(tokenId);
+            const isStudent = classroom.students.some(studentId => studentId.equals(tokenId));
+    
+            if (!isTeacher && !isStudent) {
+                return res.status(403).send('User not part of the classroom');
+            }
+    
+            const user = await User.findById(tokenId);
+            if (!user) {
+                return res.status(404).send('User not found');
+            }
+    
+            let text = req.body.text || ""; // Ensure text is provided
+            if (!text) {
+                return res.status(400).send('Text field is required');
+            }
+    
+            let attachedImage = false;
+    
+            if (req.file) {
+                attachedImage = true;
+            }
+    
+            const image = {
+                data: attachedImage ? req.file.buffer : Buffer.from(""),
+                contentType: attachedImage ? req.file.mimetype : "",
+                imageAttached: attachedImage
+            };
+    
+            classroom.chat.push({
+                name: user.firstname,
+                text: text,
+                image: image
+            });
+    
+            await classroom.save();
+    
+            return res.status(200).send({ message: 'Text sent successfully' });
+    
+        } catch (err) {
+            console.log(err);
+            return res.status(500).send(err);
+        }
+    });
+    
+    
+    
+
+    app.post('/class/:id/texts', async (req, res) => {
+        try {
+            console.log("why", req.body)
+            const token = req.body.token
+    
+            let tokenInfo
+            jwt.verify(token, ENCRYPTIONCODE, (err, info) => {
+                if (err) return res.sendStatus(403);
+                tokenInfo = info;
+            })
+            const tokenId = tokenInfo.id
+            const classroomId = req.params.id
+    
+            const classroom = await Classroom.findById(classroomId)
+            
+            if (!classroom) {
+                return res.status(404).send('Classroom not found');
+            }
+    
+            const isTeacher = classroom.teacher.equals(tokenId);
+            const isStudent = classroom.students.some(studentId => studentId.equals(tokenId));
+    
+            if (!isTeacher && !isStudent) {
+                return res.status(403).send('User not part of the classroom');
+            }
+    
+            const user = await User.findById(tokenId);
+            if (!user) {
+                return res.status(404).send('User not found');
+            }
+    
+            let texts = []
+            classroom.chat.forEach(e => {
+                const json ={
+                    name: e.name,
+                    text: e.text,
+                    image: {
+                        data: e.image.data.toString('base64'),
+                        contentType: e.image.contentType
+                    }, 
+                }
+                texts.push(json)
+            });
+            res.json({
+                texts: texts
+            })
+    
+        } catch (err) {
+            res.status(500).send(err);
+            console.log(err)
+        }
     });
     
     
