@@ -21,7 +21,7 @@
     flex-direction: row;
 }
 
-.container1 {
+#container1 {
     width: 100%;
     height: 100%;
     display: flex;
@@ -127,40 +127,6 @@
     height: 50%;
     overflow-x: hidden;
     overflow-y: scroll;
-}
-
-.classroom1 {
-    margin-left: 50px;
-    margin-top: 50px;
-    width: 150px;
-    height: 150px;
-    background-color: rgb(32, 32, 32);
-    background-image: url(./media/sword.webp);
-    background-size: contain;
-    border-radius: 10px;
-}
-
-.classroom2 {
-    margin-left: 50px;
-    margin-top: 50px;
-    width: 150px;
-    height: 150px;
-    background-color: rgb(32, 32, 32);
-    background-image: url(./media/sword.webp);
-    background-size: contain;
-    border-radius: 10px;
-}
-
-.classroom3 {
-    margin-left: 50px;
-    margin-top: 50px;
-    width: 150px;
-    height: 150px;
-    background-color: rgb(32, 32, 32);
-    background-image: url(./media/sword.webp);
-    background-size: contain;
-    background-repeat: no-repeat;
-    border-radius: 10px;
 }
 
 .title-caption {
@@ -700,4 +666,96 @@ body.active-modal {
 #log-out:hover {
     background-color: red;
     color: white;
+}
+
+#classroom1 {
+    width: 100%;
+    text-align: center;
+    background-color: rgba(0,1,13,255);
+    margin-top: 20px;
+    display: none;
+    flex-direction: row;
+}
+
+.chat {
+    width: 90%;
+    height: 85%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.message {
+    height: 15%;
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+}
+
+#text {
+    width: 80%;
+    height: 90%;
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    text-wrap: wrap;
+    resize: none;
+    overflow-y: scroll;
+}
+
+.chat p {
+    color: white;
+    margin-left: 2.5em;
+    margin-right: 2.5em;
+    margin-top: 2.5em;
+    text-align: right;
+}
+
+#file {
+    height: 40%;
+    width: 100%;
+    background-color: dodgerblue;
+    padding: 0.5em;
+    border: thin solid grey;
+    border-radius: 3px;
+}
+
+.class-list {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    width: 10%;
+}
+
+.students {
+    color: white;
+}
+
+input[type="date"] {
+    background-color: rgba(32, 32, 32, 1);
+    color: white;
+    width: 90%;
+}
+
+#submit-message {
+    height: 45%;
+    width: 100%;
+    background-color: dodgerblue;
+    padding: 0.5em;
+    border: thin solid grey;
+    border-radius: 3px;
+}
+
+#submit-message:hover {
+    cursor: pointer;
+}
+
+.buttons-message {
+    display:flex;
+    flex-direction: column;
+    width: 20%;
+}
+
+.message-and-chat {
+    width: 100%;
 }

@@ -8,7 +8,20 @@ const ClassroomDashboard = () => {
 
     const [divs, setDivs] = useState([]);
     const [divs1, setDivs1] = useState([]);
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
+
+    function myFunction() {
+        let x = document.getElementById("classroom1");
+        let z = document.getElementById("container1");
+        if (x.style.display === "none") {
+            x.style.display = "flex";
+            z.style.display = "none"
+            
+        } else {
+            x.style.display = "none";
+            z.style.display = "flex"
+        }
+        }
 
     const addDiv = () => {
         setDivs([...divs, <div key={divs.length} className="box"></div>]);
@@ -109,10 +122,6 @@ const ClassroomDashboard = () => {
             console.log(classes)
             setClasses(classes)
             
-
-
-            // const base64Image = `data:${response.data.image.contentType};base64,${response.data.image.data}`;
-            // const className = response.data.name
             
         } catch (error) {
             console.error('There was an error!', error);
@@ -199,12 +208,12 @@ const ClassroomDashboard = () => {
 
     }
 
-    const handleLogOut = async () =>
-    {
-        const token = await localStorage.getItem('token');
-        localStorage.clear()
-        navigate('/login');
-    }
+    // const handleLogOut = async () =>
+    // {
+    //     const token = await localStorage.getItem('token');
+    //     localStorage.clear()
+    //     navigate('/login');
+    // }
 
 
     return (
@@ -227,11 +236,13 @@ const ClassroomDashboard = () => {
                         <img src="" alt="" /><button>Grades</button>
                         <img src="" alt="" /><button>Classes</button>
                         <img src="" alt="" /><button onClick={toggleModal4}>Create class</button>
-                        <img src="" alt="" /><button id="log-out" onClick={toggleModal3}>Log out</button>
+                        <img src="" alt="" /><button onClick={myFunction}>Try it</button>
+                        {/* Може тази функция да го сложиш на всеки клас ^ */}
+                        <img src="" alt="" /><button id="log-out" onClick={toggleModal3}>Log out</button> 
                     </div>
                 </div>
                 
-                <div className="container1">
+                <div id="container1">
                     <div className="classrooms">
                         
                         <Classes classes={classes} />
@@ -245,6 +256,31 @@ const ClassroomDashboard = () => {
                         {divs}
                     </div>
                 </div>
+                <div id="classroom1">
+                    <div className="message-and-chat">
+                        <div className="chat">
+                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum, enim, recusandae doloribus accusamus in quos aliquam provident modi esse harum quis nostrum iusto ab cum saepe soluta nobis, non autem?</p>
+                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum, enim, recusandae doloribus accusamus in quos aliquam provident modi esse harum quis nostrum iusto ab cum saepe soluta nobis, non autem?</p>
+                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum, enim, recusandae doloribus accusamus in quos aliquam provident modi esse harum quis nostrum iusto ab cum saepe soluta nobis, non autem?</p>
+                        </div>
+                        <div className="message">
+                            <textarea type="text" id="text" placeholder="Enter a message"/>
+                        <div className="buttons-message">
+                            <input type="file" id="file" placeholder="Add file"/>
+                            <button id="submit-message">Submit</button>
+                        </div>
+                    </div>
+                </div>
+                    <div className="class-list">
+                        <div className="students">
+                            <li>firstname secondname</li>
+                            <li>firstname secondname</li>
+                            <li>firstname secondname</li>
+                            <li>firstname secondname</li>
+                        </div>
+                    </div>
+                </div>
+                
 
                 {Modal && (
                     <div className="modal">
@@ -340,7 +376,7 @@ const ClassroomDashboard = () => {
                         <div className="modal-content3">
                             <h2>Are you sure you want to log out?</h2>
                             <button className="close-modal3" onClick={toggleModal3}>No</button>
-                            <button className="save-modal3" onClick={() => {toggleModal3();handleLogOut()}}>Yes</button>
+                            <button className="save-modal3" onClick={() => {toggleModal3();}}>Yes</button>
                         </div>
                     </div>
                 )}
