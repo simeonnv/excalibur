@@ -339,17 +339,22 @@
         } else if (tokenRole === 'student') {
             classrooms = await Classroom.find({ students: tokenId });
         }
-    
-        // Convert image data to base64 for each classroom
-        classrooms = classrooms.map(classroom => {
-            if (classroom.image && classroom.image.data) {
-                classroom.image.data = classroom.image.data.toString('base64');
+
+        let array = [];
+        classrooms.forEach(e => {
+            let json = {
+                name: e.name,
+                id: e._id,
+                image: {
+                    data: e.image.data.toString('base64'),
+                    contentType: e.image.contentType
+                }
             }
-            return classroom.toObject(); // Convert MongoDB document to plain JavaScript object
+            array.push(json)
         });
-    
+
         res.json({
-            classes: classrooms
+            classes: array
         });
     });
     

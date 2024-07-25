@@ -1,25 +1,46 @@
-import React from 'react'
+// Classes.js
+import React from 'react';
 
-const Classes = ({classes}) => {
-    
-    classes.forEach(element => {
-        console.log(element.image.data)
-        console.log("new image", `data:${element.image.contentType};base64,${element.image.data}} alt={classroom.name}`)
-    });
-    
-  
-    return (
+const Classes = ({ classes }) => {
+  const getImageSrc = (image) => {
+    return `data:${image.contentType};base64,${image.data}`;
+  };
+
+  const classroomStyle = (imageSrc) => ({
+    backgroundImage: `url(${imageSrc})`,
+    backgroundSize: 'contain',
+    marginLeft: '50px',
+    marginTop: '50px',
+    width: '150px',
+    height: '150px',
+    backgroundColor: 'rgb(32, 32, 32)',
+    borderRadius: '10px',
+    display: 'inline-block',
+    cursor: 'pointer'
+  });
+
+  const titleCaptionStyle = {
+    position: 'relative',
+    top: '70%',
+    left: '0%',
+    height: '30%',
+    backgroundColor: 'rgba(32, 32, 32, 0.5)',
+    backdropFilter: 'blur(5px)',
+    color: 'white',
+    textAlign: 'center'
+  };
+
+  return (
     <div>
-    {classes.map((classroom, index) => (
-      <div key={index} className="classroom1">
-        <div className="title-caption">
-          <h4>{classroom.name}</h4>
-          <img src={`data:${classroom.image.contentType};base64,${classroom.image.data}`} alt={classroom.name} />
+      {classes.map((classroom, index) => (
+        <div key={index} className="classroom1" id={classroom.id} style={classroomStyle(getImageSrc(classroom.image))}>
+          <div className="title-caption" style={titleCaptionStyle}>
+            <h4>{classroom.name}</h4>
+          </div>
         </div>
-      </div>
-    ))}
-  </div>
-  )
-}
+      ))}
+    </div>
+  );
+};
 
-export default Classes
+export default Classes;

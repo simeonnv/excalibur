@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './ClassroomDashboardTeacher.css';
 import Classes from './Classes';
@@ -7,6 +8,7 @@ const ClassroomDashboard = () => {
 
     const [divs, setDivs] = useState([]);
     const [divs1, setDivs1] = useState([]);
+    const navigate = useNavigate();
 
     const addDiv = () => {
         setDivs([...divs, <div key={divs.length} className="box"></div>]);
@@ -88,7 +90,6 @@ const ClassroomDashboard = () => {
             const response = await axios.post('http://localhost:5000/users/me', { token });
 
             const base64Image = `data:${response.data.image.contentType};base64,${response.data.image.data}`;
-            console.log("old image", base64Image)
             setImageSrc(base64Image);
             setFirstName(response.data.firstname)
             setSecondName(response.data.secondname)
@@ -198,6 +199,14 @@ const ClassroomDashboard = () => {
 
     }
 
+    const handleLogOut = async () =>
+    {
+        const token = await localStorage.getItem('token');
+        localStorage.clear()
+        navigate('/login');
+    }
+
+
     return (
         <div>
             <div className="container">
@@ -226,7 +235,7 @@ const ClassroomDashboard = () => {
                     <div className="classrooms">
                         
                         <Classes classes={classes} />
-
+            
                     </div>
 
                     <div className="line-break1">
@@ -331,7 +340,7 @@ const ClassroomDashboard = () => {
                         <div className="modal-content3">
                             <h2>Are you sure you want to log out?</h2>
                             <button className="close-modal3" onClick={toggleModal3}>No</button>
-                            <button className="save-modal3" onClick={toggleModal3}>Yes</button>
+                            <button className="save-modal3" onClick={() => {toggleModal3();handleLogOut()}}>Yes</button>
                         </div>
                     </div>
                 )}
